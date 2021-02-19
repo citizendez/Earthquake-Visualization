@@ -1,6 +1,37 @@
 //Query URL
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
 
+// Maps
+var originalMap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+        attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+        tileSize: 512,
+        maxZoom: 18,
+        zoomOffset: -1,
+        id: "mapbox/streets-v11",
+        accessToken: API_KEY});
+
+var lightMap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?" +
+    "access_token=pk.eyJ1IjoidHNsaW5kbmVyIiwiYSI6ImNqaWNhdTFzdzFuam4za21sc3ZiMmN5bDEifQ.5Il8Y1QtwyMFWCa1JkDY_Q");
+
+var satMap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?" +
+    "access_token=pk.eyJ1IjoidHNsaW5kbmVyIiwiYSI6ImNqaWNhdTFzdzFuam4za21sc3ZiMmN5bDEifQ.5Il8Y1QtwyMFWCa1JkDY_Q");
+
+var streetmap = L.tileLayer(
+    "https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?" +
+    "access_token=pk.eyJ1IjoidHNsaW5kbmVyIiwiYSI6ImNqaWNhdTFzdzFuam4za21sc3ZiMmN5bDEifQ.5Il8Y1QtwyMFWCa1JkDY_Q"
+);
+var darkmap = L.tileLayer(
+    "https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?" +
+    "access_token=pk.eyJ1IjoidHNsaW5kbmVyIiwiYSI6ImNqaWNhdTFzdzFuam4za21sc3ZiMmN5bDEifQ.5Il8Y1QtwyMFWCa1JkDY_Q"
+);
+
+var earthquakes = new L.layerGroup(); 
+// Create a map object
+var myMap = L.map("mapid", {
+    center: [15.5994, -28.6731],
+    zoom: 2,
+    layers: [lightMap, earthquakes]
+});
 // Perform a GET request to the query URL
 // Fetch the data from the API endpoint
 d3.json(queryUrl).then(data => {
@@ -9,20 +40,6 @@ d3.json(queryUrl).then(data => {
     // Zero in on the features property of your GEOJSON
     features = data['features'];
 
-    // Create a map object
-    var myMap = L.map("mapid", {
-        center: [15.5994, -28.6731],
-        zoom: 2
-    });
-
-    L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-        attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
-        tileSize: 512,
-        maxZoom: 18,
-        zoomOffset: -1,
-        id: "mapbox/streets-v11",
-        accessToken: API_KEY
-    }).addTo(myMap);
 
     features.forEach(feature => {
         // Conditionals for countries points
@@ -84,3 +101,37 @@ d3.json(queryUrl).then(data => {
     };
     legend.addTo(myMap);
 });
+
+var faults = new L.layerGroup();
+
+var faultsURL = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json"
+
+d3.json(faultsURL, function (response) {
+    function faultStyle(feature) {
+        return {
+            weight: 5,
+            color: "orange"
+        };
+    }
+
+    L.geoJSON(response, {
+        style: faultStyle
+    }).addTo(faults);
+    faults.addTo(myMap)
+})
+
+var overlayMaps = {
+    "Fault Lines": faults,
+    "Earth Quakes": earthquakes
+};
+var baseMaps = {
+    "Light Map": lightMap,
+    "Sat Map": satMap,
+    "Street Map": streetmap,
+    "Dark Map": darkmap
+
+};
+
+L.control.layers(baseMaps, overlayMaps, {
+    collapsed: false
+}).addTo(myMap);
