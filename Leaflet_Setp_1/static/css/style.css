@@ -9,3 +9,24 @@ html {
   height: 100%;
   width: 100%
 }
+
+    .legend {
+        width: 150px;
+        background-color: white;
+        border: solid 1px black;
+    }
+
+    .legend_item  {
+        font-weight: bold;
+        padding: .25em;
+        color: white;    
+    }
+
+    .legend_item span {
+        background-color: white;
+        color: black;
+        padding: .25em;
+        display:inline-block;
+        min-width: 50%;
+    }
+

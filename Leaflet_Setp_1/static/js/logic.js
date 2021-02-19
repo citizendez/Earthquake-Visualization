@@ -49,10 +49,10 @@ d3.json(queryUrl).then(data => {
             color = 'rgb(135, 250, 50)';
         }
         else if (depth > 5) {
-            color = 'rgb(255, 120, 50)';
+            color = 'rgb(50, 255, 77)';
         }
         else {
-            color = 'rgb(0, 255, 17)';
+            color = 'rgb(0, 206, 18)';
         }
 
         // Add circles to map
@@ -70,7 +70,16 @@ d3.json(queryUrl).then(data => {
 
         var div = L.DomUtil.create('div', 'info legend');
  
-        div.innerHTML = '<div style="background-color:red;">Depth 100+</div>';
+        div.innerHTML = `
+        <div class="legend">
+            <div class="legend_item" style="background-color: rgba(255, 50, 50, .8);"><span>100+</span></div>  
+            <div class="legend_item" style="background-color: rgba(255, 120, 50,.8);"><span>75-99</span></div>
+            <div class="legend_item" style="background-color: rgba(255, 180, 50,.8);"><span>50-74</span></div>
+            <div class="legend_item" style="background-color: rgba(255, 255, 50,.8);"><span>49-25</span></div>
+            <div class="legend_item" style="background-color: rgba(135, 250, 50,.8);"><span>24-10</span></div>
+            <div class="legend_item" style="background-color: rgba(50, 255, 77,.8);"><span>9-5</span></div>
+            <div class="legend_item" style="background-color: rgba(0, 206, 18,.8);"><span>0-4</span></div> 
+        </div>`;
         return div;
     };
     legend.addTo(myMap);
