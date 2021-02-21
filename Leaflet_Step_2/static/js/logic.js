@@ -98,12 +98,13 @@ d3.json(queryUrl, function(data){
         //POPUP FOR MARKERS
         onEachFeature: function (feature, layer) {
             layer.bindPopup(
-                "Magnitude: "
-                + feature.properties.mag
-                + "<br>Depth: "
-                + feature.geometry.coordinates[2]
-                + "<br>Location: "
+                "<h4>Location: </h4>"
                 + feature.properties.place
+                +"</h4>Magnitude: </h4>"
+                + feature.properties.mag
+                + "<h4>Depth: </h4>"
+                + feature.geometry.coordinates[2]
+                
             );
         }
      //ADD DATA TO EARTHQUAKE LAYER
