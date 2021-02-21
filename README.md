@@ -6,4 +6,4 @@
     - Data markers reflect depth of the earthquake by their color from red(deepest) to green(shallowest)  
     -  Included popups that provide location and magnitude data  
     -  Legend reflects depth data  
-![step1](Leaflet_Step_1/Images/step1.png)
+![step1](Leaflet_Setp_1/Images/step1.PNG)
