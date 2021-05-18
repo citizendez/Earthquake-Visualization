@@ -1,4 +1,4 @@
-# leaflet-challenge  
+# Earthquake, Tectonic Plates & Seismic Activity 
 ## Part 1 Basic Visualization of Earthquake Data  
 - Retrieve data from USGS GeoJSON Feed  
 - Create a map using Leaflet that plots earthquakes from data set based on their longitude and latitude   
